@@ -12,6 +12,7 @@ import (
 func main() {
 	router := mux.NewRouter()
 	routes.RegisterLibraryApiRoutes(router)
+	http.Handle("/", router)
 	fmt.Println("Library Server is running...")
 	log.Fatal(http.ListenAndServe(":8080", router))
 

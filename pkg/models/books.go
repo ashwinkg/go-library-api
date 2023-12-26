@@ -1,8 +1,6 @@
 package models
 
 import (
-	"log"
-
 	"github.com/ashwinkg/go-library-api/pkg/config"
 	"github.com/jinzhu/gorm"
 )
@@ -20,12 +18,8 @@ type Book struct {
 func init() {
 	config.Connect()
 	db = config.GetDB()
-
 	//Peform database migration
-	err := db.AutoMigrate(&Book{})
-	if err != nil {
-		log.Fatal(err)
-	}
+	db.AutoMigrate(&Book{})
 }
 
 func (book *Book) AddBook() *Book {
@@ -34,7 +28,7 @@ func (book *Book) AddBook() *Book {
 	return book
 }
 
-func GetbookbyId(bookID int) (*Book, *gorm.DB) {
+func GetbookbyId(bookID int64) (*Book, *gorm.DB) {
 	var book Book
 	db.Where("ID=?", bookID).Find(&book)
 	return &book, db

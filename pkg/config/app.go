@@ -8,7 +8,7 @@ import (
 var db *gorm.DB
 
 func Connect() {
-	d, err := gorm.Open("mysql", "root:my-secret-pw@/dbname?charset=utf8&parseTime=True&loc=Local")
+	d, err := gorm.Open("mysql", "root:my-secret-pw@/libary_api?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		panic(err)
 	}
