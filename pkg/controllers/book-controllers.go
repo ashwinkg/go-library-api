@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -12,6 +13,14 @@ import (
 )
 
 func Getallbooks(w http.ResponseWriter, r *http.Request) {
+	books, err := models.Getallbooks()
+	if err != nil {
+		log.Fatal("Error fetaching all the books")
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	response, _ := json.Marshal(books)
+	w.Write(response)
 
 }
 

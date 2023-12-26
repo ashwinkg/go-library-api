@@ -33,3 +33,15 @@ func GetbookbyId(bookID int64) (*Book, *gorm.DB) {
 	db.Where("ID=?", bookID).Find(&book)
 	return &book, db
 }
+
+func Getallbooks() ([]Book, error) {
+	var books []Book
+	// Get all records
+	result := db.Find(&books)
+	if result.Error != nil {
+		// Handle the error, return it, or log it
+		return nil, result.Error
+	}
+
+	return books, nil
+}
