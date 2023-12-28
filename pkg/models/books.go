@@ -45,3 +45,35 @@ func Getallbooks() ([]Book, error) {
 
 	return books, nil
 }
+
+func DeleteBook(bookID int64) (*Book, error) {
+	var book Book
+
+	//First, find the book
+	result := db.First(&book, bookID)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	//Then delete it
+	result = db.Where("ID=?", bookID).Delete(&book)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &book, nil
+}
+
+func UpdateBook(bookID int64, updatedbook Book) (*Book, error) {
+
+	var existingBook Book
+	result := db.First(&existingBook, bookID)
+	if result.Error != nil {
+		return nil, result.Error // Handle errors, e.g., record not found
+	}
+
+	result = db.Model(&existingBook).Updates(updatedbook)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &existingBook, nil
+}

@@ -54,9 +54,54 @@ func AddBook(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateBook(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	id, err := strconv.ParseInt(params["id"], 0, 0)
+	if err != nil {
+		http.Error(w, "Invalid book id", http.StatusBadRequest)
+		return
+	}
+
+	updatedbook := &models.Book{}
+	utils.ParseBody(r, updatedbook)
+
+	book, err := models.UpdateBook(id, *updatedbook)
+	if err != nil {
+		http.Error(w, "Error updating book", http.StatusInternalServerError)
+		return
+	}
+	response, err := json.Marshal(book)
+	if err != nil {
+		http.Error(w, "Error marshalling response", http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("Updated the below book"))
+	w.Write(response)
 
 }
 
 func DeleteBook(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	id, err := strconv.ParseInt(params["id"], 0, 0)
+	if err != nil {
+		fmt.Println("error while parsing")
+		http.Error(w, "Invalid book ID", http.StatusBadRequest)
+		return
+	}
+	book, err := models.DeleteBook(id)
+	if err != nil {
+		http.Error(w, "Error deleting book", http.StatusInternalServerError)
+		return
+	}
+	response, err := json.Marshal(book)
+	if err != nil {
+		http.Error(w, "Error marshalling response", http.StatusInternalServerError)
+		return
+	}
 
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("Deleted the below book"))
+	w.Write(response)
 }
